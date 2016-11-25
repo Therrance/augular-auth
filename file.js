@@ -3,7 +3,7 @@
 angular.module('app', ['ngRoute'])
 
 .config(function($routeProvider) {
-    $routeProvider.when('/', {
+    $routeProvider.when('/:firstName/:middleName/:lastName', {
         templateUrl: 'app.html',
         controller: 'AppCtrl',
         controllerAs: 'app'
@@ -15,7 +15,7 @@ angular.module('app', ['ngRoute'])
     });
 })
 
-.controller('AppCtrl', function($route) {
+.controller('AppCtrl', function($routeParams) {
 /*    $route.routes['/'] = {
         templateUrl: 'app.html',
         controller: 'AppCtrl',
@@ -23,6 +23,6 @@ angular.module('app', ['ngRoute'])
     };*/
 
     let self = this;
-    self.message = 'The routing is working!';
+    self.message = `${$routeParams.firstName} ${$routeParams.middleName} ${$routeParams.lastName}`;
 
 });
