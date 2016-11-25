@@ -2,15 +2,22 @@
 
 angular.module('app', ['ngRoute'])
 
-.config(function($routeProvider) {
+/*.config(function($routeProvider) {
     $routeProvider.when('/', {
         templateUrl: 'app.html',
         controller: 'AppCtrl',
         controllerAs: 'app'
     });
-})
+})*/
 
-.controller('AppCtrl', function(){
+.controller('AppCtrl', function($route) {
+    $route.routes['/'] = {
+        templateUrl: 'app.html',
+        controller: 'AppCtrl',
+        controllerAs: 'app'
+    };
+
     let self = this;
     self.message = 'The routing is working!';
+
 });
