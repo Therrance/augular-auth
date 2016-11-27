@@ -6,11 +6,18 @@ angular.module('app', ['ngRoute'])
     $routeProvider.when('/', {
             templateUrl: 'app.html',
             controller: 'AppCtrl',
-            controllerAs: 'app'
+            resolve: {
+                app: function($q, $timeout) {
+                    let defer = $q.defer();
+                    $timeout(function() {
+                        defer.resolve();
+                    }, 2000);
+                    return defer.promise;
+                }
+            }
         })
-        .when('/cookies/:cookieType', 
-        {
-            redirectTo: function(routeParams, path, search){
+        .when('/cookies/:cookieType', {
+            redirectTo: function(routeParams, path, search) {
                 console.log(routeParams);
                 console.log(path);
                 console.log(search);
@@ -30,14 +37,10 @@ angular.module('app', ['ngRoute'])
         });
 })
 
-.controller('AppCtrl', function($routeParams) {
-    /*    $route.routes['/'] = {
-            templateUrl: 'app.html',
-            controller: 'AppCtrl',
-            controllerAs: 'app'
-        };*/
+.controller('AppCtrl', function($scope) {
 
-    let self = this;
-    self.message = `The app routing is working`;
+    $scope.model = {
+        message: `The app is great`
+    };
 
 });
