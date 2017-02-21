@@ -29,6 +29,20 @@
     };
 
     // add authentication methods here
+    
+    self.register = function(username, password){
+      return $http.post(API + '/auth/register', {
+        username: username,
+        password: password
+      });
+    };
+    
+    self.login = function(username, password){
+      return $http.post(API + '/auth/login', {
+        username: username,
+        password: password
+      });
+    };
 
   }
 
@@ -68,7 +82,7 @@
     .factory('authInterceptor', authInterceptor)
     .service('user', userService)
     .service('auth', authService)
-    .constant('API', 'http://test-routes.herokuapp.com')
+    .constant('API', 'https://test-routes.herokuapp.com')
     .config(function($httpProvider) {
       $httpProvider.interceptors.push('authInterceptor');
     })
