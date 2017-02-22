@@ -11,6 +11,10 @@
 
       // If a token was sent back, save it
       response: function(res) {
+        if(res.config.url.indexOf(API) === 0 && res.data.token){
+          auth.saveToken(res.data.token);
+        }
+        
         return res;
       },
     };
@@ -20,6 +24,35 @@
     var self = this;
 
     // Add JWT methods here
+
+    self.parseJwt = function(token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace('-', '+').replace('_', '/');
+      return JSON.parse($window.atob(base64));
+    };
+
+    self.saveToken = function(token) {
+      $window.localStorage['jwtToken'] = token;
+    };
+
+    self.getToken = function() {
+      return $window.localStorage['jwtToken'];
+    };
+
+    self.isAuthed = function() {
+      var token = self.getToken();
+      if (token) {
+        var params = self.parseJwt(token);
+        return Math.round(new Date().getTime() / 1000) <= params.exp;
+      }
+      else {
+        return false;
+      }
+    };
+
+    self.logout = function() {
+      $window.localStorage.removeItem('jwtToken');
+    };
   }
 
   function userService($http, API, auth) {
@@ -29,49 +62,20 @@
     };
 
     // add authentication methods here
-    
-    self.register = function(username, password){
+
+    self.register = function(username, password) {
       return $http.post(API + '/auth/register', {
         username: username,
         password: password
       });
     };
-    
-    self.login = function(username, password){
+
+    self.login = function(username, password) {
       return $http.post(API + '/auth/login', {
         username: username,
         password: password
       });
     };
-    
-    self.parseJwt = function(token){
-      var base64Url = token.split('.')[1];
-      var base64 = base64Url.replace('-', '+').replace('_', '/');
-      return JSON.parse($window.atob(base64));
-    };
-    
-    self.saveToken = function(token){
-      $window.localStorage['jwtToken'] = token;
-    };
-    
-    self.getToken = function(){
-      return $window.localStorage['jwtToken'];
-    };
-    
-    self.isAuthed = function() {
-      var token = self.getToken();
-      if(token){
-        var params = self.parseJwt(token);
-        return Math.round(new Date.getTime() / 1000) <= params.exp;
-      } else {
-        return false;
-      }
-    };
-    
-    self.logout = function(){
-      $window.localStorage.removeItem('jwtToken');
-    };
-
   }
 
   // We won't touch anything in here
