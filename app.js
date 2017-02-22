@@ -57,6 +57,20 @@
     self.getToken = function(){
       return $window.localStorage['jwtToken'];
     };
+    
+    self.isAuthed = function() {
+      var token = self.getToken();
+      if(token){
+        var params = self.parseJwt(token);
+        return Math.round(new Date.getTime() / 1000) <= params.exp;
+      } else {
+        return false;
+      }
+    };
+    
+    self.logout = function(){
+      $window.localStorage.removeItem('jwtToken');
+    };
 
   }
 
