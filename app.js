@@ -49,6 +49,14 @@
       var base64 = base64Url.replace('-', '+').replace('_', '/');
       return JSON.parse($window.atob(base64));
     };
+    
+    self.saveToken = function(token){
+      $window.localStorage['jwtToken'] = token;
+    };
+    
+    self.getToken = function(){
+      return $window.localStorage['jwtToken'];
+    };
 
   }
 
